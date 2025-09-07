@@ -9,7 +9,7 @@ pipeline {
    stages {
        stage('Clone') {
            steps {
-               git 'https://github.com/sakshisirgan/java-selenium-sauce-demo-automation-project.git'
+               git branch: 'main', url: 'https://github.com/sakshisirgan/java-selenium-sauce-demo-automation-project.git'
            }
        }
  
