@@ -1,12 +1,11 @@
 package pages;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.List;
 
 public class CartPage {
 
@@ -34,10 +33,5 @@ public class CartPage {
     public boolean isCheckoutButtonVisible() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(checkoutButton));
         return driver.findElement(checkoutButton).isDisplayed();
-    }
-
-    public boolean isCartEmpty() {
-        List<?> items = driver.findElements(cartItemName);
-        return items.isEmpty();
     }
 }

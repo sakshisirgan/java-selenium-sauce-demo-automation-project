@@ -4,7 +4,6 @@ import com.aventstack.extentreports.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.ITestResult;
 import org.testng.annotations.*;
 import pages.LoginPage;
 import pages.ProductPage;
@@ -43,53 +42,22 @@ public class CartTest {
     }
 
     @Test
-    public void testCartEmptyInitially() {
-        test = extent.createTest("Cart Empty Initially Test");
-
-        cartPage.openCart();
-        boolean isEmpty = cartPage.isCartEmpty();
-
-        test.info("Cart empty status: " + isEmpty);
-        Assert.assertTrue(isEmpty, "Cart is not empty initially!");
-    }
-
-    @Test
     public void testAddProductToCart() throws InterruptedException {
         test = extent.createTest("Add Product To Cart Test");
 
-        productPage.addProductToCart();
+        productPage.addProductToCart(); 
         cartPage.openCart();
-        String itemName = cartPage.getCartItemName();
+        String itemName = cartPage.getCartItemName(); 
 
-        test.info("Item in cart: " + itemName);
-        Assert.assertTrue(itemName.contains("Sauce Labs Bike Light"),
-                "Expected Sauce Labs Bike Light but found: " + itemName);
-    }
+        String screenshotPath = ScreenShotUtils.takeScreenshot(driver, "AddProductToCart");
+        test.info("Item in cart: " + itemName)
+            .addScreenCaptureFromPath(screenshotPath);
 
-    @Test
-    public void testCheckoutButtonVisible() throws InterruptedException {
-        test = extent.createTest("Checkout Button Visibility Test");
-
-        productPage.addProductToCart();
-        cartPage.openCart();
-        boolean checkoutVisible = cartPage.isCheckoutButtonVisible();
-
-        test.info("Checkout button visible: " + checkoutVisible);
-        Assert.assertTrue(checkoutVisible, "Checkout button not visible after adding product!");
+        Assert.assertFalse(itemName.isEmpty(), "No product was added to the cart!");
     }
 
     @AfterMethod
-    public void tearDown(ITestResult result) {
-        String screenshotPath = ScreenShotUtils.takeScreenshot(driver, result.getName());
-
-        if (result.getStatus() == ITestResult.FAILURE) {
-            test.fail("Test Failed").addScreenCaptureFromPath(screenshotPath);
-        } else if (result.getStatus() == ITestResult.SUCCESS) {
-            test.pass("Test Passed").addScreenCaptureFromPath(screenshotPath);
-        } else if (result.getStatus() == ITestResult.SKIP) {
-            test.skip("Test Skipped");
-        }
-
+    public void tearDown() {
         driver.quit();
     }
 

@@ -12,34 +12,35 @@ public class CheckoutPage {
     WebDriver driver;
     WebDriverWait wait;
 
-    public By firstNameInput = By.id("first-name");
-    public By lastNameInput = By.id("last-name");
-    public By postalCodeInput = By.id("postal-code");
+    public By firstName = By.id("first-name");
+    public By lastName = By.id("last-name");
+    public By postalCode = By.id("postal-code");
     public By continueButton = By.id("continue");
     public By finishButton = By.id("finish");
-    public By successMessage = By.className("complete-header");
+    public By confirmationMsg = By.cssSelector(".complete-header");
+    public By checkoutButton = By.id("checkout");
 
     public CheckoutPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public void enterCheckoutInfo(String firstName, String lastName, String postalCode) {
-        driver.findElement(firstNameInput).sendKeys(firstName);
-        driver.findElement(lastNameInput).sendKeys(lastName);
-        driver.findElement(postalCodeInput).sendKeys(postalCode);
+    public void clickCheckoutButton() {
+        wait.until(ExpectedConditions.elementToBeClickable(checkoutButton)).click();
     }
 
-    public void clickContinue() {
+    public void enterCheckoutInformation(String fName, String lName, String zip) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(firstName)).sendKeys(fName);
+        driver.findElement(lastName).sendKeys(lName);
+        driver.findElement(postalCode).sendKeys(zip);
         driver.findElement(continueButton).click();
     }
 
-    public void clickFinish() {
-        driver.findElement(finishButton).click();
+    public void completeOrder() {
+        wait.until(ExpectedConditions.elementToBeClickable(finishButton)).click();
     }
 
-    public String getSuccessMessage() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage));
-        return driver.findElement(successMessage).getText().trim();
+    public String getConfirmationMessage() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(confirmationMsg)).getText().trim();
     }
 }

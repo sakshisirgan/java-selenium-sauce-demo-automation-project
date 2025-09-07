@@ -3,10 +3,11 @@
     <test name="LoginTests_Chrome">
         <parameter name="browser" value="chrome"/>
         <classes>
-          <!--<class name="tests.ProductTest"/>-->
-           <!--<class name="tests.CartTest"/>-->
-          <!--<class name="tests.CheckoutTest"/>-->
-           <class name="tests.IntegrationTest"/>
+           <class name="tests.ProductTest"/>
+           <class name="tests.CartTest"/>
+           <class name="tests.CheckoutTest"/>
+           <class name="tests.NavigationUITest"/>
+           <class name="tests.NegativeTest"/>
         </classes>
     </test>
 </suite>

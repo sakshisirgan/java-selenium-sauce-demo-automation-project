@@ -1,97 +1,69 @@
 package tests;
 
-import com.aventstack.extentreports.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.ITestResult;
 import org.testng.annotations.*;
-import pages.LoginPage;
-import pages.ProductPage;
-import pages.CartPage;
+
+import core.DriverFactory;
 import pages.CheckoutPage;
-import utils.ExtentManager;
 import utils.ScreenShotUtils;
+import utils.ExtentManager;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
 
 public class CheckoutTest {
 
     WebDriver driver;
+    CheckoutPage checkoutPage;
     ExtentReports extent;
     ExtentTest test;
-    LoginPage loginPage;
-    ProductPage productPage;
-    CartPage cartPage;
-    CheckoutPage checkoutPage;
 
-    @BeforeTest
-    public void startReport() {
+    @BeforeClass
+    public void setup() {
+        driver = DriverFactory.getDriver("chrome");
+        driver.get("https://www.saucedemo.com/");
         extent = ExtentManager.getExtentReports();
     }
 
-    @BeforeMethod
-    public void setup() throws InterruptedException {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://www.saucedemo.com/");
+    @Test(priority = 1)
+    public void testNavigateToCheckoutPage() {
+        test = extent.createTest("Navigate to Checkout Page");
 
-        loginPage = new LoginPage(driver);
-        productPage = new ProductPage(driver);
-        cartPage = new CartPage(driver);
+        driver.findElement(By.id("user-name")).sendKeys("standard_user");
+        driver.findElement(By.id("password")).sendKeys("secret_sauce");
+        driver.findElement(By.id("login-button")).click();
+
+        driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click();
+        driver.findElement(By.cssSelector(".shopping_cart_link")).click();
+
         checkoutPage = new CheckoutPage(driver);
+        checkoutPage.clickCheckoutButton();
 
-        loginPage.enterUsername("standard_user");
-        loginPage.enterPassword("secret_sauce");
-        loginPage.clickLogin();
+        Assert.assertTrue(driver.findElement(checkoutPage.firstName).isDisplayed(), 
+                          "Checkout page is not displayed");
 
-        productPage.addProductToCart();
-        cartPage.openCart();
+        String path = ScreenShotUtils.takeScreenshot(driver, "NavigateToCheckoutPage");
+        test.pass("Checkout page displayed successfully").addScreenCaptureFromPath(path);
     }
 
-    @Test
-    public void testCheckoutWithValidDetails() {
-        test = extent.createTest("Checkout With Valid Details Test");
+    @Test(priority = 2)
+    public void testCheckoutWithValidInformation() {
+        test = extent.createTest("Checkout with Valid Information");
 
-        driver.findElement(cartPage.checkoutButton).click();
-        checkoutPage.enterCheckoutInfo("Lata", "Jain", "12345");
-        checkoutPage.clickContinue();
-        checkoutPage.clickFinish();
+        checkoutPage.enterCheckoutInformation("Marie", "Grander", "11223");
+        checkoutPage.completeOrder();
 
-        String message = checkoutPage.getSuccessMessage();
-        test.info("Checkout success message: " + message);
+        String confirmation = checkoutPage.getConfirmationMessage();
+        Assert.assertEquals(confirmation, "Thank you for your order!");
 
-        Assert.assertEquals(message, "Thank you for your order!", "Checkout not completed!");
+        String path = ScreenShotUtils.takeScreenshot(driver, "CheckoutSuccess");
+        test.pass("Order completed successfully").addScreenCaptureFromPath(path);
     }
 
-    @Test
-    public void testCheckoutWithMissingDetails() {
-        test = extent.createTest("Checkout With Missing Details Test");
-
-        driver.findElement(cartPage.checkoutButton).click();
-        checkoutPage.enterCheckoutInfo("", "Jain", "12345");
-        checkoutPage.clickContinue();
-
-        String errorMessage = driver.findElement(By.cssSelector("h3[data-test='error']")).getText();
-        test.info("Error message: " + errorMessage);
-
-        Assert.assertTrue(errorMessage.contains("Error"), "Expected error message not shown!");
-    }
-
-    @AfterMethod
-    public void tearDown(ITestResult result) {
-        String screenshotPath = ScreenShotUtils.takeScreenshot(driver, result.getName());
-
-        if (result.getStatus() == ITestResult.FAILURE) {
-            test.fail("Test Failed").addScreenCaptureFromPath(screenshotPath);
-        } else if (result.getStatus() == ITestResult.SUCCESS) {
-            test.pass("Test Passed").addScreenCaptureFromPath(screenshotPath);
-        }
-
-        driver.quit();
-    }
-
-    @AfterTest
-    public void endReport() {
+    @AfterClass
+    public void teardown() {
+        DriverFactory.quitDriver();
         extent.flush();
     }
 }

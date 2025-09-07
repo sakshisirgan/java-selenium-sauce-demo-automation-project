@@ -4,15 +4,13 @@
   <test thread-count="3" parallel="tests" name="LoginTests_Chrome(failed)">
     <parameter name="browser" value="chrome"/>
     <classes>
-      <class name="tests.IntegrationTest">
+      <class name="tests.NavigationUITest">
         <methods>
-          <include name="testFullPurchaseFlow"/>
-          <include name="flushReport"/>
+          <include name="testLogoutFromBurgerMenu"/>
           <include name="setup"/>
-          <include name="tearDown"/>
-          <include name="setupReport"/>
+          <include name="teardown"/>
         </methods>
-      </class> <!-- tests.IntegrationTest -->
+      </class> <!-- tests.NavigationUITest -->
     </classes>
   </test> <!-- LoginTests_Chrome(failed) -->
 </suite> <!-- Failed suite [SwagLabs Automation Suite] -->
