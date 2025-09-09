@@ -16,7 +16,7 @@ pipeline {
       stage('Checkout from Git') {
          steps {
             git branch: "${env.BRANCH_NAME}",
-            url: 'hhttps://github.com/sakshisirgan/java-selenium-sauce-demo-automation-project.git'
+            url: 'https://github.com/sakshisirgan/java-selenium-sauce-demo-automation-project.git'
          }
       }
       
