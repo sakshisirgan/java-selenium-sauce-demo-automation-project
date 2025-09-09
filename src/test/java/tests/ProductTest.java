@@ -34,7 +34,7 @@ public class ProductTest {
     }
 
     @Test(priority = 1)
-    public void testAddProductToCart() throws InterruptedException {
+    public void testAddProductToCart() {
         test = extent.createTest("Add Product to Cart");
         productPage.addProductToCart();
         int count = productPage.getCartCount();
@@ -44,7 +44,7 @@ public class ProductTest {
     }
 
     @Test(priority = 2)
-    public void testClickOnProductDetails() throws InterruptedException {
+    public void testClickOnProductDetails() {
         test = extent.createTest("Click Product for Details");
         productPage.clickOnProduct();
         String url = driver.getCurrentUrl();

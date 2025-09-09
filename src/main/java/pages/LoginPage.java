@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-
+// This is the login page module
 public class LoginPage {
 
     WebDriver driver;
@@ -20,7 +20,7 @@ public class LoginPage {
     public By passwordInput = By.id("password");
     public By loginButton = By.id("login-button");
     public By errorMessage = By.cssSelector("h3[data-test='error']");
-    public By menuButton = By.id("react-burger-menu-btn");
+    public By menureactButton = By.id("react-burger-menu-btn");
     public By logoutButton = By.id("logout_sidebar_link");
 
     public void enterUsername(String username) {
@@ -51,7 +51,7 @@ public class LoginPage {
 	}
     
     public void logout() {
-        driver.findElement(menuButton).click();
+        driver.findElement(menureactButton).click();
         wait.until(ExpectedConditions.elementToBeClickable(logoutButton));
         driver.findElement(logoutButton).click();
     }

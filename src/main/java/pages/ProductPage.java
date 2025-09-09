@@ -1,11 +1,16 @@
 package pages;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ProductPage {
 
 	WebDriver driver;
+	WebDriverWait wait;
 	
 	public By cartItemsBadge = By.cssSelector(".shopping_cart_badge");
 	public By addProductButton = By.id("add-to-cart-sauce-labs-bike-light");
@@ -13,16 +18,15 @@ public class ProductPage {
 
 	public ProductPage(WebDriver driver) {
 		this.driver = driver;
+		wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+    }
+	
+	public void addProductToCart() {
+	    wait.until(ExpectedConditions.elementToBeClickable(addProductButton)).click();
 	}
 
-	public void addProductToCart() throws InterruptedException {
-		driver.findElement(addProductButton).click();
-		Thread.sleep(1000);
-	}
-
-	public void clickOnProduct() throws InterruptedException {
-		driver.findElement(productTitleLink).click();
-		Thread.sleep(2000);
+	public void clickOnProduct() {
+	    wait.until(ExpectedConditions.elementToBeClickable(productTitleLink)).click();
 	}
 
 	public int getCartCount() {

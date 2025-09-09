@@ -42,7 +42,7 @@ public class CartTest {
     }
 
     @Test
-    public void testAddProductToCart() throws InterruptedException {
+    public void testAddProductToCart() {
         test = extent.createTest("Add Product To Cart Test");
 
         productPage.addProductToCart(); 
