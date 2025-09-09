@@ -8,9 +8,7 @@ pipeline {
    }
    
    // Auto-trigger every 5 mins on Git changes
-   triggers {
-      pollSCM('H H * * *')
-   }
+  
    
    stages {
       stage('Checkout from Git') {
